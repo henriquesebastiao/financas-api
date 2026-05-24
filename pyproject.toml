@@ -30,6 +30,7 @@ upgrade = true
 
 [tool.ruff]
 line-length = 79
+extend-exclude = ["migrations"]
 
 [tool.ruff.lint]
 preview = true
