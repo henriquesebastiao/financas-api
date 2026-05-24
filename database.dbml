@@ -1,0 +1,41 @@
+Table accounts {
+  id int [pk]
+  name varchar(15) [unique, not null]
+  balance decimal(10,2) [not null, default: 0.0]
+  deleted bool [not null, default: true]
+}
+
+Table movements {
+  id int [pk]
+  value decimal(10,2) [not null, default: 0.0]
+  description varchar(50) [not null]
+  type type_movements [not null]
+  include_calculations bool [not null, default: true]
+  created_at datetime [not null]
+  establishment_id int [not null, ref: > establishments.id]
+  account_id int [not null, ref: > accounts.id]
+  categorie_id int [not null, ref: > categories.id]
+}
+
+Table categories {
+  id int [pk]
+  name varchar(15) [not null]
+}
+
+Table projected_expenses {
+  id int [pk]
+  description varchar(50) [not null]
+  value decimal(10,2) [not null, default: 0.0]
+  due_date date [not null]
+}
+
+Table establishments {
+  id int [pk]
+  name varchar(100) [not null]
+}
+
+Enum type_movements {
+  expense
+  income
+  transfer
+}
