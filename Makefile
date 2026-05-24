@@ -7,6 +7,9 @@ lint: # Run linters
 format: # Format code
 	uv run ruff format .; uv run ruff check . --fix
 
+radon: # Run code complexity analysis
+	uv run radon cc ./app -a -na
+
 test: # Run tests with coverage
 	uv run pytest -s -x --cov=app -v; uv run coverage html
 
@@ -44,6 +47,7 @@ deps-dev: # Show development dependencies
 .PHONY: \
 	lint \
 	format \
+	radon \
 	test \
 	sync \
 	export \

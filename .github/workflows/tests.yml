@@ -1,0 +1,73 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, Typecheck, Test
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: financas
+          POSTGRES_PASSWORD: financas
+          POSTGRES_DB: financas_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U financas -d financas_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgresql+asyncpg://financas:financas@localhost:5432/financas_test
+      ENV: ci
+      LOG_LEVEL: warning
+      SERVICE_NAME: api-ci
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v7
+        with:
+          enable-cache: true
+
+      - name: Set up Python
+        run: uv python install 3.14
+
+      - name: Install dependencies
+        run: uv sync --all-groups
+
+      - name: Lint
+        run: uv run ruff check .
+
+      - name: Format check
+        run: uv run ruff format --check .
+
+      - name: Complexity check
+        run: uv run radon cc ./app -a -na
+
+      - name: Tests
+        run: uv run pytest -s -x --cov=app -v
+
+      - name: Coverage
+        run: uv run coverage html
+
+      - name: Store coverage files
+        uses: actions/upload-artifact@v6
+        with:
+          name: coverage-html
+          path: htmlcov
