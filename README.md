@@ -1,5 +1,10 @@
 # Finanças API
 
+[![Tests](https://github.com/henriquesebastiao/financas-api/actions/workflows/tests.yml/badge.svg)](https://github.com/henriquesebastiao/financas-api/actions/workflows/tests.yml)
+[![coverage](https://coverage-badge.samuelcolvin.workers.dev/henriquesebastiao/financas-api.svg)](https://coverage-badge.samuelcolvin.workers.dev/redirect/henriquesebastiao/financas-api)
+[![Static Badge](https://img.shields.io/badge/status-dev-%232FBF50)](https://github.com/henriquesebastiao/financas-api/)
+[![GitHub License](https://img.shields.io/badge/license-PolyForm_Noncommercial-blue)](https://github.com/henriquesebastiao/financas-api/blob/main/LICENSE)
+
 Este projeto é uma API RESTful [_self-hosted_](https://dev.to/carrie_luo1/self-hosting-what-why-and-how-14o4) de código aberto para gerenciamento de finanças pessoais.
 
 ### Segurança
