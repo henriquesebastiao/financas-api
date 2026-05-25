@@ -2,6 +2,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
+from app.routes import accounts
 from app.schemas.health import HealthOut
 
 app = FastAPI(
@@ -23,3 +24,6 @@ app.add_middleware(
 @app.get('/health', response_model=HealthOut)
 async def health():
     return {'status': 'ok'}
+
+
+app.include_router(accounts.router)

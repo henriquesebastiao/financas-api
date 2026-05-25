@@ -14,6 +14,7 @@ from sqlalchemy.ext.asyncio import (
 )
 from testcontainers.postgres import PostgresContainer
 
+from app.core.database import get_session
 from app.main import app
 
 _ALEMBIC_INI = Path(__file__).resolve().parent.parent / 'alembic.ini'
@@ -74,8 +75,15 @@ async def db_session(db_engine: AsyncEngine) -> AsyncIterator[AsyncSession]:
 
 
 @pytest.fixture
-async def client():
+async def client(db_session: AsyncSession):
+    async def get_session_override():
+        yield db_session
+
+    app.dependency_overrides[get_session] = get_session_override
+
     async with AsyncClient(
         transport=ASGITransport(app=app), base_url='https://test'
     ) as test_client:
         yield test_client
+
+    app.dependency_overrides.clear()
