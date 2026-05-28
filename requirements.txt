@@ -23,11 +23,11 @@ certifi==2026.5.20
 click==8.4.1
     # via
     #   rich-toolkit
-    #   typer
     #   uvicorn
 colorama==0.4.6 ; sys_platform == 'win32'
     # via
     #   click
+    #   typer
     #   uvicorn
 detect-installer==0.1.0
     # via fastapi-cloud-cli
@@ -55,7 +55,7 @@ h11==0.16.0
     #   uvicorn
 httpcore==1.0.9
     # via httpx
-httptools==0.7.1
+httptools==0.8.0
     # via uvicorn
 httpx==0.28.1
     # via
@@ -124,7 +124,7 @@ sqlalchemy==2.0.50
     #   financas-api
 starlette==1.1.0
     # via fastapi
-typer==0.25.1
+typer==0.26.2
     # via
     #   fastapi-cli
     #   fastapi-cloud-cli

@@ -17,10 +17,10 @@ class AccountPublic(AccountBase):
     deleted: bool
 
 
-class AccountUpdate(AccountBase):
-    model_config = ConfigDict(extra='forbid')
-
-    deleted: bool = Field(default=False)
+class AccountUpdate(BaseModel):
+    name: str | None = None
+    balance: Decimal | None = None
+    deleted: bool | None = None
 
 
 class AccountList(BaseModel):
