@@ -117,3 +117,27 @@ async def test_route_update_account_already_exists(client, account):
 
     assert response.status_code == status.HTTP_409_CONFLICT
     assert response.json()['detail'] == 'Account already exists'
+
+
+async def test_route_delete_account(client, account):
+    response = await client.delete(f'/accounts/{account.id}')
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json()['deleted'] is True
+    assert response.json()['name'] == account.name
+
+
+async def test_route_delete_account_does_not_exist(client):
+    response = await client.delete('/accounts/10')
+
+    assert response.status_code == status.HTTP_404_NOT_FOUND
+    assert response.json()['detail'] == 'Account does not exist'
+
+
+async def test_route_delete_account_already_been_deleted(client, account):
+    await client.delete(f'/accounts/{account.id}')
+    next_response = await client.delete(f'/accounts/{account.id}')
+    assert next_response.status_code == status.HTTP_400_BAD_REQUEST
+    assert (
+        next_response.json()['detail']
+        == 'The account has already been deleted'
+    )
