@@ -141,3 +141,14 @@ async def test_route_delete_account_already_been_deleted(client, account):
         next_response.json()['detail']
         == 'The account has already been deleted'
     )
+
+
+async def test_route_list_accounts(client, account):
+    response = await client.get('/accounts/list')
+
+    assert response.status_code == status.HTTP_200_OK
+
+    response = response.json()['accounts'].pop()
+    assert response['name'] == account.name
+    assert response['balance'] == '150.00'
+    assert response['deleted'] is False
