@@ -16,6 +16,7 @@ from testcontainers.postgres import PostgresContainer
 
 from app.core.database import get_session
 from app.main import app
+from tests.factories import AccountFactory
 
 _ALEMBIC_INI = Path(__file__).resolve().parent.parent / 'alembic.ini'
 
@@ -87,3 +88,13 @@ async def client(db_session: AsyncSession):
         yield test_client
 
     app.dependency_overrides.clear()
+
+
+@pytest.fixture
+async def account(db_session: AsyncSession):
+    AccountFactory.with_session(db_session)
+    account = AccountFactory()
+    db_session.add(account)
+    await db_session.commit()
+    await db_session.refresh(account)
+    return account
